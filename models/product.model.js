@@ -23,30 +23,130 @@ Product.findAll = function (result) {
     });
 };
 
-Product.findAllWithPage = function (lim, off, page, result) {
-    dbConn.query("Select * from product limit " + lim + " offset " + off, function (err, res) {
-        if (err) {
-            console.log("error: ", err)
-            result(null, err)
-        } else {
-            console.log(res);
-            result(null, {
-                'products_page_count': res.length,
-                'page_number': page,
-                'products': res
-            })
-        }
-    });
+Product.findAllWithPage = function (lim, off, page, gender, style, size, result) {
+    if (isNaN(parseFloat(off))) {
+        dbConn.query("Select * from product limit " + lim, function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, res)
+            }
+        });
+    } else if (gender === undefined && style === undefined && size === undefined) {
+        // console.log('gss is null')
+        dbConn.query("Select * from product limit " + lim + " offset " + off, function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    } else if (gender !== undefined && style !== undefined && size === undefined) {
+        console.log('Hello1')
+        dbConn.query("Select * from product where LOWER(product_gen) = ? AND LOWER(product_style) = ? limit " + lim + " offset " + off, [gender, style], function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    } else if (gender !== undefined && style === undefined && size !== undefined) {
+        console.log('Hello2')
+        dbConn.query("Select * from product where LOWER(product_gen) = ? AND LOWER(product_size) = ? limit " + lim + " offset " + off, [gender, size], function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    } else if (gender === undefined && style !== undefined && size !== undefined) {
+        console.log('Hello4')
+        dbConn.query("Select * from product where LOWER(product_style) = ? AND LOWER(product_size) = ? limit " + lim + " offset " + off, [style, size], function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    } else if (gender !== undefined && style !== undefined && size !== undefined) {
+        console.log('Hello3')
+        dbConn.query("Select * from product where LOWER(product_gen) = ? AND LOWER(product_style) = ? AND LOWER(product_size) = ? limit " + lim + " offset " + off, [gender, style, size], function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    } else {
+        // console.log('not null' + gender + style + size)
+        dbConn.query("Select * from product where LOWER(product_gen) = ? OR LOWER(product_style) = ? OR LOWER(product_size) = ? limit " + lim + " offset " + off, [gender, style, size], function (err, res) {
+            if (err) {
+                console.log("error: ", err)
+                result(null, err)
+            } else {
+                console.log(res);
+                result(null, {
+                    'products_page_count': res.length,
+                    'page_number': page,
+                    'products': res
+                })
+            }
+        });
+    }
+
 };
 
-Product.findAllWithAmount = function (lim, result) {
-    dbConn.query("Select * from product limit " + lim, function (err, res) {
+// Product.findAllWithAmount = function (lim, result) {
+//     dbConn.query("Select * from product limit " + lim, function (err, res) {
+//         if (err) {
+//             console.log("error: ", err)
+//             result(null, err)
+//         } else {
+//             console.log(res);
+//             result(null, res)
+//         }
+//     });
+// };
+
+Product.search = function (key, result) {
+    dbConn.query('Select * from product where LOWER(CONCAT(product_gen,product_style,product_style_name,product_size)) LIKE "%' + key + '%" ', function (err, res) {
         if (err) {
-            console.log("error: ", err)
-            result(null, err)
+            console.log("error: ", err);
+            result(err, null);
         } else {
-            console.log(res);
-            result(null, res)
+            result(null, res);
         }
     });
 };
@@ -55,7 +155,9 @@ Product.create = function (newProd, result) {
     dbConn.query("INSERT INTO product set ?", newProd, function (err, res) {
         if (err) {
             console.log("error: ", err);
-            result(err, null);
+            result({
+                'error': 'ไม่สามารถทำรายการได้ เนื่องจากรหัสสินค้าซ้ำ'
+            }, null);
         } else {
             console.log(res);
             result(null, res);
@@ -65,17 +167,6 @@ Product.create = function (newProd, result) {
 
 Product.findById = function (id, result) {
     dbConn.query("Select * from product where id = ? ", id, function (err, res) {
-        if (err) {
-            console.log("error: ", err);
-            result(err, null);
-        } else {
-            result(null, res);
-        }
-    });
-};
-
-Product.search = function (key, result) {
-    dbConn.query('Select * from product where LOWER(CONCAT(product_gen,product_style,product_style_name,product_size)) LIKE "%' + key + '%" ', function (err, res) {
         if (err) {
             console.log("error: ", err);
             result(err, null);

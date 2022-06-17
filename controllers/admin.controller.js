@@ -14,9 +14,9 @@ exports.getAllOrder = function (req, res) {
     });
 };
 
-exports.getOrderbyId = function (req, res) {
-    var name = req.query.name;
-    Cart.getOrderbyId(name, function (err, product) {
+exports.getOrderDetailById = function (req, res) {
+    var id = req.query.id;
+    Cart.getOrderDetailById(id, function (err, product) {
         if (err)
             res.send(err);
         res.json(product);
@@ -24,10 +24,13 @@ exports.getOrderbyId = function (req, res) {
 };
 
 exports.findAllWithPage = function (req, res) {
-    var limit = 5;
+    var limit = req.query.limit;
     var page = req.query.page;
     var offset = (page - 1) * limit;
-    Order.findAllWithPage(limit, offset, page, function (err, product) {
+    var startDate = req.query.startDate;
+    var endDate = req.query.endDate;
+    var status = req.query.order_status;
+    Order.findAllWithPage(limit, offset, page, startDate, endDate, status, function (err, product) {
         console.log('controller')
         if (err)
             res.send(err);
@@ -36,25 +39,25 @@ exports.findAllWithPage = function (req, res) {
     });
 };
 
-exports.findAllWithAmount = function (req, res) {
-    var limit = req.query.amount;
-    Order.findAllWithAmount(limit, function (err, product) {
-        console.log('controller')
-        if (err)
-            res.send(err);
-        console.log('res', product);
-        res.send(product);
-    });
-};
+// exports.findAllWithAmount = function (req, res) {
+//     var limit = req.query.amount;
+//     Order.findAllWithAmount(limit, function (err, product) {
+//         console.log('controller')
+//         if (err)
+//             res.send(err);
+//         console.log('res', product);
+//         res.send(product);
+//     });
+// };
 
-exports.getOrderByStatus = function (req, res) {
-    var status = req.query.status;
-    console.log(status);
-    Order.getOrderByStatus(status, function (err, order) {
-        console.log('controller')
-        if (err)
-            res.send(err);
-        console.log('res', order);
-        res.send(order);
-    });
-};
+// exports.getOrderByStatus = function (req, res) {
+//     var status = req.query.status;
+//     console.log(status);
+//     Order.getOrderByStatus(status, function (err, order) {
+//         console.log('controller')
+//         if (err)
+//             res.send(err);
+//         console.log('res', order);
+//         res.send(order);
+//     });
+// };

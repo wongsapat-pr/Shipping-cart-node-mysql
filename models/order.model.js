@@ -102,7 +102,10 @@ function insertNewItemToCart(orderId, detail, result) {
     dbConn.query("INSERT INTO order_detail (order_id,product_id,order_detail_qty,order_detail_price) values (?,?,?,?)", [orderId, detail.product_id, detail.order_detail_qty, detail.order_detail_price], function (err, res) {
         if (err) {
             console.log("error: ", err);
-            result(err, null);
+            // result(err, null);
+            result({
+                'error': 'ไม่สามารถทำรายการได้เนื่องจากไม่มีสินค้ารหัสนี้'
+            }, null);
         } else {
             console.log(res);
             result(null, res);

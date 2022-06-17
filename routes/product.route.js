@@ -5,11 +5,14 @@ const productController = require('../controllers/product.controller');
 // Get All Product
 productRoute.get('/', productController.findAll);
 
-// Get Product by Pagination
-productRoute.get('/getpage', productController.findAllWithPage);
+// Get Product by filter&Pagination
+productRoute.get('/get', productController.findAllWithPage);
 
 // Get Product by Amount
-productRoute.get('/getamount', productController.findAllWithAmount);
+// productRoute.get('/getamount', productController.findAllWithAmount);
+
+// Product Search
+productRoute.get('/search', productController.search)
 
 // Create a new Product
 productRoute.post('/create', productController.create);
@@ -22,8 +25,5 @@ productRoute.put('/:id', productController.update);
 
 // Delete a Product with id
 productRoute.delete('/:id', productController.delete);
-
-// Product Search
-productRoute.get('/search/:key', productController.search)
 
 module.exports = productRoute;

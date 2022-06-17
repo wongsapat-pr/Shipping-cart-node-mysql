@@ -15,13 +15,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/product",
+							"raw": "localhost:3000/product/",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"product"
+								"product",
+								""
 							]
 						}
 					},
@@ -34,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"product_code\": \"M0011\",\r\n    \"product_name\": \"T-shirt\",\r\n    \"product_gen\": \"Men\",\r\n    \"product_style\": \"Figure\",\r\n    \"product_style_name\": \"Spiderman\",\r\n    \"product_size\": \"S\",\r\n    \"product_price\": \"450\"\r\n}",
+							"raw": "{\r\n    \"product_code\": \"M0013\",\r\n    \"product_name\": \"T-shirt\",\r\n    \"product_gen\": \"Men\",\r\n    \"product_style\": \"Figure\",\r\n    \"product_style_name\": \"Trunk\",\r\n    \"product_size\": \"S\",\r\n    \"product_price\": \"450\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -61,39 +62,66 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/product/search/pi",
+							"raw": "localhost:3000/product/search?key=spiderman",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"product",
-								"search",
-								"pi"
+								"search"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "spiderman"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Product with Pagination",
+					"name": "Get Product by Pagination",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/product/getpage?page=2",
+							"raw": "localhost:3000/product/get?limit=3&page=1&gender=men&style=figure",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"product",
-								"getpage"
+								"get"
 							],
 							"query": [
 								{
+									"key": "limit",
+									"value": "3",
+									"description": "set show item per page"
+								},
+								{
 									"key": "page",
-									"value": "2"
+									"value": "1",
+									"description": "select page"
+								},
+								{
+									"key": "gender",
+									"value": "men",
+									"description": "men/ women"
+								},
+								{
+									"key": "style",
+									"value": "figure",
+									"description": "plain color/ pattern/ figure"
+								},
+								{
+									"key": "size",
+									"value": "xs",
+									"description": "xs/ s/ l/ xl",
+									"disabled": true
 								}
 							]
 						}
@@ -156,7 +184,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"product_id\" : \"M0010\",\r\n    \"order_detail_qty\": \"5\",\r\n    \"order_detail_price\":\"400\"\r\n}",
+							"raw": "{\r\n    \"product_id\" : \"M0013\",\r\n    \"order_detail_qty\": \"5\",\r\n    \"order_detail_price\":\"400\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -190,7 +218,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"order_address\" : \"Samutsakorn\"\r\n}",
+							"raw": "{\r\n    \"order_address\" : \"Bangkok\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -198,7 +226,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/cart/checkout?id=1",
+							"raw": "localhost:3000/cart/checkout?id=2",
 							"host": [
 								"localhost"
 							],
@@ -210,7 +238,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -228,117 +256,84 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/admin?name=Test",
+							"raw": "localhost:3000/admin",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"admin"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Test"
-								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "GetOrderById",
+					"name": "GetOrderDetailById",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/admin?name=Test",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"admin"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Test"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetByPage",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/admin/getpage?page=2",
+							"raw": "localhost:3000/admin/getorder?id=1",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"admin",
-								"getpage"
+								"getorder"
 							],
 							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by Pagination",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/admin/get?limit=5&page=1&startDate=2022-06-15&endDate=2022-06-14",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"get"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "set show item per page"
+								},
 								{
 									"key": "page",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetByAmount",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/admin/getamount?amount=2",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"admin",
-								"getamount"
-							],
-							"query": [
+									"value": "1",
+									"description": "select page"
+								},
 								{
-									"key": "amount",
-									"value": "2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetOrderByStatus",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/admin/status?status=placed_order",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"admin",
-								"status"
-							],
-							"query": [
+									"key": "startDate",
+									"value": "2022-06-15",
+									"description": "yyyy-mm-dd"
+								},
 								{
-									"key": "status",
-									"value": "placed_order"
+									"key": "endDate",
+									"value": "2022-06-14",
+									"description": "yyyy-mm-dd"
+								},
+								{
+									"key": "order_status",
+									"value": "placed_order",
+									"description": "placed_order/ paid",
+									"disabled": true
 								}
 							]
 						}

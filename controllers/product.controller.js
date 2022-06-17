@@ -12,10 +12,13 @@ exports.findAll = function (req, res) {
 };
 
 exports.findAllWithPage = function (req, res) {
-    var limit = 5;
+    var limit = req.query.limit;
     var page = req.query.page;
     var offset = (page - 1) * limit;
-    Product.findAllWithPage(limit, offset, page, function (err, product) {
+    var gender = req.query.gender;
+    var style = req.query.style;
+    var size = req.query.size;
+    Product.findAllWithPage(limit, offset, page, gender, style, size, function (err, product) {
         console.log('controller')
         if (err)
             res.send(err);
@@ -24,14 +27,22 @@ exports.findAllWithPage = function (req, res) {
     });
 };
 
-exports.findAllWithAmount = function (req, res) {
-    var limit = req.query.amount;
-    Product.findAllWithAmount(limit, function (err, product) {
-        console.log('controller')
+// exports.findAllWithAmount = function (req, res) {
+//     var limit = req.query.amount;
+//     Product.findAllWithAmount(limit, function (err, product) {
+//         console.log('controller')
+//         if (err)
+//             res.send(err);
+//         console.log('res', product);
+//         res.send(product);
+//     });
+// };
+
+exports.search = function (req, res) {
+    Product.search(req.query.key, function (err, product) {
         if (err)
             res.send(err);
-        console.log('res', product);
-        res.send(product);
+        res.json(product);
     });
 };
 
@@ -58,14 +69,6 @@ exports.create = function (req, res) {
 
 exports.findById = function (req, res) {
     Product.findById(req.params.id, function (err, product) {
-        if (err)
-            res.send(err);
-        res.json(product);
-    });
-};
-
-exports.search = function (req, res) {
-    Product.search(req.params.key, function (err, product) {
         if (err)
             res.send(err);
         res.json(product);
