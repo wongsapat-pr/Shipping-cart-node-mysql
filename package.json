@@ -1,18 +1,28 @@
 {
   "name": "shipping-node-mysql",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve" : "nodemon server.js"
+    "serve": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.16"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wongsapat-pr/Shipping-cart-node-mysql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wongsapat-pr/Shipping-cart-node-mysql/issues"
+  },
+  "homepage": "https://github.com/wongsapat-pr/Shipping-cart-node-mysql#readme",
+  "description": ""
 }
