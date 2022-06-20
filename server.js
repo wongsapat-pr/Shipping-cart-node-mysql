@@ -18,11 +18,11 @@ app.get('/', (req, res) => {
 // Require product routes
 const productRoutes = require('./routes/product.route');
 const orderRoutes = require('./routes/order.route');
-const adminRoutes = require('./routes/admin.route')
+
 // using as middleware
 app.use('/product', productRoutes);
-app.use('/cart', orderRoutes);
-app.use('/admin', adminRoutes);
+app.use('/order', orderRoutes);
+
 // listen for requests
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);

@@ -4,9 +4,22 @@ const {
     Order
 } = require('../models/order.model');
 
+exports.findAll = function (req, res) {
+    var limit = req.query.limit;
+    var page = req.query.page;
+    var offset = (page - 1) * limit;
+    var startDate = req.query.startDate;
+    var endDate = req.query.endDate;
+    var status = req.query.status;
+    Order.findAll(limit, offset, page, startDate, endDate, status, function (err, product) {
+        if (err)
+            res.send(err);
+        res.json(product);
+    });
+};
+
 exports.findByorderId = function (req, res) {
-    var name = req.query.name;
-    Cart.findByorderId(name, function (err, product) {
+    Cart.findByorderId(req.params.id, function (err, product) {
         if (err)
             res.send(err);
         res.json(product);

@@ -55,14 +55,14 @@ DROP TABLE IF EXISTS `order_detail`;
 CREATE TABLE `order_detail` (
   `id` int NOT NULL AUTO_INCREMENT,
   `order_id` int NOT NULL,
-  `product_id` varchar(5) COLLATE utf8_bin NOT NULL,
+  `product_id` int NOT NULL,
   `order_detail_qty` int NOT NULL,
   `order_detail_price` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_idx` (`order_id`),
-  KEY `FK_productId` (`product_id`),
+  KEY `FK_productId_idx` (`product_id`),
   CONSTRAINT `FK_orderId` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
-  CONSTRAINT `FK_productId` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_code`)
+  CONSTRAINT `FK_productId` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin COMMENT='		';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -72,7 +72,7 @@ CREATE TABLE `order_detail` (
 
 LOCK TABLES `order_detail` WRITE;
 /*!40000 ALTER TABLE `order_detail` DISABLE KEYS */;
-INSERT INTO `order_detail` VALUES (1,1,'M0001',2,400.00),(2,1,'M0005',2,400.00),(3,1,'M0006',13,400.00),(7,1,'M0008',1,400.00),(8,1,'M0010',16,400.00),(10,2,'M0010',5,400.00),(12,6,'M0010',5,400.00),(13,9,'M0010',10,400.00),(14,9,'M0011',5,400.00);
+INSERT INTO `order_detail` VALUES (1,1,1,2,400.00),(2,1,2,2,400.00),(3,1,3,13,400.00),(7,1,5,1,400.00),(8,1,8,16,400.00),(10,2,1,5,400.00),(12,6,4,5,400.00),(13,9,6,15,400.00),(14,9,8,5,400.00);
 /*!40000 ALTER TABLE `order_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-17 14:39:06
+-- Dump completed on 2022-06-20 23:30:14

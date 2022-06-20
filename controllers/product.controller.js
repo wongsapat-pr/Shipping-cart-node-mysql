@@ -2,7 +2,14 @@
 const Product = require('../models/product.model');
 
 exports.findAll = function (req, res) {
-    Product.findAll(function (err, product) {
+    var limit = req.query.limit;
+    var page = req.query.page;
+    var offset = (page - 1) * limit;
+    var gender = req.query.gender;
+    var style = req.query.style;
+    var size = req.query.size;
+    var search = req.query.search;
+    Product.findAll(limit, offset, page, gender, style, size, search, function (err, product) {
         console.log('controller')
         if (err)
             res.send(err);
@@ -11,21 +18,21 @@ exports.findAll = function (req, res) {
     });
 };
 
-exports.findAllWithPage = function (req, res) {
-    var limit = req.query.limit;
-    var page = req.query.page;
-    var offset = (page - 1) * limit;
-    var gender = req.query.gender;
-    var style = req.query.style;
-    var size = req.query.size;
-    Product.findAllWithPage(limit, offset, page, gender, style, size, function (err, product) {
-        console.log('controller')
-        if (err)
-            res.send(err);
-        console.log('res', product);
-        res.send(product);
-    });
-};
+// exports.findAllWithPage = function (req, res) {
+//     var limit = req.query.limit;
+//     var page = req.query.page;
+//     var offset = (page - 1) * limit;
+//     var gender = req.query.gender;
+//     var style = req.query.style;
+//     var size = req.query.size;
+//     Product.findAllWithPage(limit, offset, page, gender, style, size, function (err, product) {
+//         console.log('controller')
+//         if (err)
+//             res.send(err);
+//         console.log('res', product);
+//         res.send(product);
+//     });
+// };
 
 // exports.findAllWithAmount = function (req, res) {
 //     var limit = req.query.amount;
@@ -38,13 +45,13 @@ exports.findAllWithPage = function (req, res) {
 //     });
 // };
 
-exports.search = function (req, res) {
-    Product.search(req.query.key, function (err, product) {
-        if (err)
-            res.send(err);
-        res.json(product);
-    });
-};
+// exports.search = function (req, res) {
+//     Product.search(req.query.key, function (err, product) {
+//         if (err)
+//             res.send(err);
+//         res.json(product);
+//     });
+// };
 
 exports.create = function (req, res) {
     const new_product = new Product(req.body);

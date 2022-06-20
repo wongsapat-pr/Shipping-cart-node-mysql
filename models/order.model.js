@@ -16,8 +16,29 @@ var Cart = function (cart) {
     this.order_detail_price = cart.order_detail_price;
 };
 
-Cart.findByorderId = function (user, result) {
-    dbConn.query("Select * from order_detail where (select order_id from clothstore.order where order_fullname = '" + user + "' AND order_status = 'placed_order') ", function (err, res) {
+Order.findAll = function (limit, offset, page, startDate, endDate, status, result) {
+    var dbQuery = 'Select * from clothstore.order where 1=1';
+    if (startDate !== undefined && endDate !== undefined) dbQuery += ' AND end_date BETWEEN ' + "'" + startDate + "' AND " + "'" + endDate + "'";
+    if (status !== undefined) dbQuery += ' AND LOWER(order_status) = ' + "'" + status + "'";
+    if (limit !== undefined) dbQuery += ' limit ' + limit;
+    if (page !== undefined) dbQuery += ' offset ' + offset;
+    dbConn.query(dbQuery, function (err, res) {
+        if (err) {
+            console.log("error: ", err)
+            result(null, err)
+        } else {
+            console.log(res);
+            result(null, {
+                'products_page_count': res.length,
+                'page_number': page,
+                'products': res
+            })
+        }
+    });
+};
+
+Cart.findByorderId = function (id, result) {
+    dbConn.query("select p.product_code,p.product_name,p.product_gen,p.product_style,p.product_style_name,d.order_detail_qty,d.order_detail_price from clothstore.order_detail d  join clothstore.product p on d.product_id = p.id where order_id = ?  ", id, function (err, res) {
         if (err) {
             console.log("error: ", err);
             result(err, null);

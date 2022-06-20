@@ -11,19 +11,30 @@ var Product = function (product) {
     this.product_price = product.product_price;
 };
 
-Product.findAll = function (result) {
-    dbConn.query("Select * from product", function (err, res) {
+Product.findAll = function (limit, offset, page, gender, style, size, search, result) {
+    var dbQuery = 'Select * from product where 1=1';
+    if (gender !== undefined) dbQuery += ' AND LOWER(product_gen) = ' + "'" + gender + "'";
+    if (style !== undefined) dbQuery += ' AND LOWER(product_style) = ' + "'" + style + "'";
+    if (size !== undefined) dbQuery += ' AND LOWER(product_size) = ' + "'" + size + "'";
+    if (search !== undefined) dbQuery += ' AND LOWER(CONCAT(product_gen,product_style,product_style_name,product_size)) LIKE "%' + search + '%" ';
+    if (limit !== undefined) dbQuery += ' limit ' + limit;
+    if (page !== undefined) dbQuery += ' offset ' + offset;
+    dbConn.query(dbQuery, function (err, res) {
         if (err) {
             console.log("error: ", err)
             result(null, err)
         } else {
             console.log(res);
-            result(null, res)
+            result(null, {
+                'products_page_count': res.length,
+                'page_number': page,
+                'products': res
+            })
         }
     });
 };
 
-Product.findAllWithPage = function (lim, off, page, gender, style, size, result) {
+Product.findAllWithPage = function (lim, off, gender, style, size, result) {
     if (isNaN(parseFloat(off))) {
         dbConn.query("Select * from product limit " + lim, function (err, res) {
             if (err) {
