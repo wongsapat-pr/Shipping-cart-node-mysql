@@ -139,17 +139,17 @@ Product.findAllWithPage = function (lim, off, gender, style, size, result) {
 
 };
 
-// Product.findAllWithAmount = function (lim, result) {
-//     dbConn.query("Select * from product limit " + lim, function (err, res) {
-//         if (err) {
-//             console.log("error: ", err)
-//             result(null, err)
-//         } else {
-//             console.log(res);
-//             result(null, res)
-//         }
-//     });
-// };
+Product.findAllWithAmount = function (lim, result) {
+    dbConn.query("Select * from product limit " + lim, function (err, res) {
+        if (err) {
+            console.log("error: ", err)
+            result(null, err)
+        } else {
+            console.log(res);
+            result(null, res)
+        }
+    });
+};
 
 Product.search = function (key, result) {
     dbConn.query('Select * from product where LOWER(CONCAT(product_gen,product_style,product_style_name,product_size)) LIKE "%' + key + '%" ', function (err, res) {
