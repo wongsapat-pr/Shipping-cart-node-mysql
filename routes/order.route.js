@@ -2,7 +2,7 @@ const express = require('express');
 const cartRoute = express.Router();
 const orderController = require('../controllers/order.controller');
 
-// Retrieve a cart with id
+// Get All order
 cartRoute.get('/', orderController.findAll);
 
 // Retrieve a single order with id
